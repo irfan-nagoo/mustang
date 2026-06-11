@@ -1,0 +1,131 @@
+definitions:
+  dto.CartDTO:
+    properties:
+      expiryDate:
+        type: string
+      id:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/dto.ItemDTO'
+        type: array
+      userId:
+        type: string
+    type: object
+  dto.ItemDTO:
+    properties:
+      id:
+        format: int64
+        type: integer
+      imageUrl:
+        type: string
+      price:
+        $ref: '#/definitions/vo.Money'
+      quantity:
+        format: int64
+        type: integer
+      title:
+        type: string
+    type: object
+  request.CartRequest:
+    properties:
+      item:
+        $ref: '#/definitions/dto.ItemDTO'
+      userId:
+        type: string
+    type: object
+  response.BaseResponse:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    type: object
+  types.CurrencyType:
+    enum:
+    - USD
+    - INR
+    type: string
+    x-enum-varnames:
+    - USD
+    - INR
+  vo.Money:
+    properties:
+      amount:
+        type: number
+      currency:
+        $ref: '#/definitions/types.CurrencyType'
+    type: object
+info:
+  contact: {}
+paths:
+  /carts:
+    post:
+      consumes:
+      - application/json
+      description: Add item to cart
+      parameters:
+      - description: Add item payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.CartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CartDTO'
+      summary: Add item
+      tags:
+      - addcart
+  /carts/users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get cart
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CartDTO'
+      summary: Get cart
+      tags:
+      - getcart
+  /carts/users/{id}/items/{itemId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete item from cart
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Item ID
+        in: path
+        name: itemId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Delete item from cart
+      tags:
+      - deletecart
+swagger: "2.0"

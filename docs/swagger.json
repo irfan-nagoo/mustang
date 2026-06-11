@@ -1,0 +1,201 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/carts": {
+            "post": {
+                "description": "Add item to cart",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "addcart"
+                ],
+                "summary": "Add item",
+                "parameters": [
+                    {
+                        "description": "Add item payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CartRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CartDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/carts/users/{id}": {
+            "get": {
+                "description": "Get cart",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "getcart"
+                ],
+                "summary": "Get cart",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.CartDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/carts/users/{id}/items/{itemId}": {
+            "delete": {
+                "description": "Delete item from cart",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "deletecart"
+                ],
+                "summary": "Delete item from cart",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Item ID",
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.CartDTO": {
+            "type": "object",
+            "properties": {
+                "expiryDate": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.ItemDTO"
+                    }
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ItemDTO": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "price": {
+                    "$ref": "#/definitions/vo.Money"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CartRequest": {
+            "type": "object",
+            "properties": {
+                "item": {
+                    "$ref": "#/definitions/dto.ItemDTO"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.BaseResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.CurrencyType": {
+            "type": "string",
+            "enum": [
+                "USD",
+                "INR"
+            ],
+            "x-enum-varnames": [
+                "USD",
+                "INR"
+            ]
+        },
+        "vo.Money": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "currency": {
+                    "$ref": "#/definitions/types.CurrencyType"
+                }
+            }
+        }
+    }
+}
